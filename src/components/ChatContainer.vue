@@ -211,121 +211,48 @@
                   <!-- Text message with markdown support -->
                   <div v-if="msg.content" class="whitespace-pre-line message-text text-xs sm:text-sm" v-html="formatMessageContent(msg.content)"></div>
                   
-                  <!-- Image message -->
-                  <div v-if="msg.imageData" class="mb-3 media-container animate-media-appear">
+                  <!-- Image message - temporarily hidden -->
+                  <div v-if="false && msg.imageData" class="mb-3 media-container animate-media-appear">
                     <div class="media-header text-xs font-medium text-blue-700 dark:text-blue-400 mb-2 flex items-center bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm">
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
                       </svg>
                       <span>Media được chia sẻ</span>
                     </div>
-                    <div class="media-content bg-blue-50/50 dark:bg-blue-900/10 p-1.5 overflow-hidden rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-blue-100 dark:border-blue-800/30">
-                      <div class="media-frame rounded-lg overflow-hidden relative group">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-blue-100/20 to-blue-300/10 pointer-events-none"></div>
-                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/5 dark:group-hover:bg-white/5 transition-all duration-300 z-10"></div>
-                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-                          <div class="bg-black/60 dark:bg-white/20 rounded-full p-2 transform scale-90 group-hover:scale-100 transition-transform duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-                            </svg>
-                          </div>
-                        </div>
-                        <img 
-                          :src="msg.imageData" 
-                          class="max-w-full rounded-lg cursor-pointer transition-all duration-300 hover:scale-[1.02]"
-                          alt="Shared image"
-                          loading="lazy"
-                          @click="openImagePreview(msg.imageData, msg.selfDestruct, msg.selfDestructTime, msg.id)"
-                        />
-                      </div>
-                    </div>
                     
-                    <!-- Self-destruct indicator -->
-                    <div v-if="msg.selfDestruct && !msg.viewStarted && msg.sender !== 'user'" 
-                      class="flex items-center mt-2 text-xs text-rose-500 bg-rose-50 dark:bg-rose-900/20 px-2 py-1 rounded-full shadow-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                      </svg>
-                      <span>Hình ảnh sẽ tự hủy sau {{ msg.selfDestructTime }} giây</span>
-                    </div>
-                    
-                    <!-- Self-destruct countdown -->
-                    <div v-if="msg.viewStarted && !msg.isDestroyed" 
-                      class="flex items-center mt-2 text-xs text-rose-500 bg-rose-50 dark:bg-rose-900/20 px-2 py-1 rounded-full animate-pulse shadow-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span>Tự hủy sau {{ msg.countdown || msg.selfDestructTime }} giây</span>
-                    </div>
-                    
-                    <!-- Destroyed indicator -->
-                    <div v-if="msg.isDestroyed" 
-                      class="flex items-center mt-2 text-xs text-gray-500 bg-gray-50 dark:bg-gray-800/50 px-2 py-1 rounded-full shadow-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                      <span>Hình ảnh đã tự hủy</span>
-                    </div>
+                    <!-- Rest of the image message component -->
                   </div>
                   
-                  <!-- Video message -->
-                  <div v-if="msg.videoData" class="mb-3 media-container animate-media-appear">
-                    <div class="media-header text-xs font-medium text-blue-700 dark:text-blue-400 mb-2 flex items-center bg-white dark:bg-gray-800 p-2 rounded-lg shadow-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
-                        <path d="M14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z" />
-                      </svg>
-                      <span>Video được chia sẻ</span>
-                    </div>
-                    <div class="media-content bg-blue-50/50 dark:bg-blue-900/10 p-1.5 overflow-hidden rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 border border-blue-100 dark:border-blue-800/30">
-                      <div class="media-frame rounded-lg overflow-hidden relative group">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-blue-100/20 to-blue-300/10 pointer-events-none z-10"></div>
-                        <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                          <div class="bg-black/40 dark:bg-black/60 rounded-full p-3 opacity-80 group-hover:opacity-0 transition-opacity duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor">
-                              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-                            </svg>
-                          </div>
-                        </div>
-                        <video 
-                          :src="msg.videoData" 
-                          class="max-w-full rounded-lg transition-all duration-300 hover:scale-[1.02]"
-                          controls
-                          preload="metadata"
-                          controlsList="nodownload"
-                          style="max-height: 350px;"
-                          @play="handleVideoPlay(msg.id, msg.selfDestruct, msg.selfDestructTime)"
-                          @click.stop="openVideoPreview(msg.videoData, msg.selfDestruct, msg.selfDestructTime, msg.id)"
-                        ></video>
-                      </div>
-                    </div>
-                    
-                    <!-- Self-destruct indicator -->
-                    <div v-if="msg.selfDestruct && !msg.viewStarted && msg.sender !== 'user'" 
-                      class="flex items-center mt-2 text-xs text-rose-500 bg-rose-50 dark:bg-rose-900/20 px-2 py-1 rounded-full shadow-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                      </svg>
-                      <span>Video sẽ tự hủy sau {{ msg.selfDestructTime }} giây</span>
-                    </div>
-                    
-                    <!-- Self-destruct countdown -->
-                    <div v-if="msg.viewStarted && !msg.isDestroyed" 
-                      class="flex items-center mt-2 text-xs text-rose-500 bg-rose-50 dark:bg-rose-900/20 px-2 py-1 rounded-full animate-pulse shadow-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span>Tự hủy sau {{ msg.countdown || msg.selfDestructTime }} giây</span>
-                    </div>
-                    
-                    <!-- Destroyed indicator -->
-                    <div v-if="msg.isDestroyed" 
-                      class="flex items-center mt-2 text-xs text-gray-500 bg-gray-50 dark:bg-gray-800/50 px-2 py-1 rounded-full shadow-sm">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                      <span>Video đã tự hủy</span>
-                    </div>
+                  <!-- Video message - temporarily hidden -->
+                  <div v-if="false && msg.videoData" class="mb-3 media-container animate-media-appear">
+                    <!-- Video message content -->
+                  </div>
+                  
+                  <!-- Self-destruct indicator -->
+                  <div v-if="msg.selfDestruct && !msg.viewStarted && msg.sender !== 'user'" 
+                    class="flex items-center mt-2 text-xs text-rose-500 bg-rose-50 dark:bg-rose-900/20 px-2 py-1 rounded-full shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <span>Hình ảnh sẽ tự hủy sau {{ msg.selfDestructTime }} giây</span>
+                  </div>
+                  
+                  <!-- Self-destruct countdown -->
+                  <div v-if="msg.viewStarted && !msg.isDestroyed" 
+                    class="flex items-center mt-2 text-xs text-rose-500 bg-rose-50 dark:bg-rose-900/20 px-2 py-1 rounded-full animate-pulse shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>Tự hủy sau {{ msg.countdown || msg.selfDestructTime }} giây</span>
+                  </div>
+                  
+                  <!-- Destroyed indicator -->
+                  <div v-if="msg.isDestroyed" 
+                    class="flex items-center mt-2 text-xs text-gray-500 bg-gray-50 dark:bg-gray-800/50 px-2 py-1 rounded-full shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    <span>Hình ảnh đã tự hủy</span>
                   </div>
                 </div>
               </div>
@@ -582,8 +509,8 @@
               </div>
             </div>
             
-            <!-- Attachment button -->
-            <div class="relative">
+            <!-- Attachment button - temporarily hidden -->
+            <div v-if="false" class="relative">
               <button @click="toggleAttachmentOptions" class="p-2 rounded-full text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
@@ -625,11 +552,11 @@
             <!-- Send button -->
             <button 
               @click="sendMessage" 
-              :disabled="!isPaired || (!newMessage && !selectedImage && !selectedFile)"
+              :disabled="!isPaired || !newMessage"
               :class="{ 
                 'p-2 rounded-full transition-all': true,
-                'bg-secondary-500 text-white hover:bg-secondary-600': isPaired && (newMessage || selectedImage || selectedFile),
-                'bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-500 cursor-not-allowed': !isPaired || (!newMessage && !selectedImage && !selectedFile)
+                'bg-secondary-500 text-white hover:bg-secondary-600': isPaired && newMessage,
+                'bg-gray-200 text-gray-400 dark:bg-gray-700 dark:text-gray-500 cursor-not-allowed': !isPaired || !newMessage
               }"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -657,6 +584,35 @@
     <!-- Image/Video Lightbox -->
     <transition name="fade">
       <div v-if="showMediaPreview" class="media-lightbox" @click.self="closeMediaPreview">
+        <div class="media-lightbox-content" :class="{'active': showMediaPreview}">
+          <img v-if="previewType === 'image'" :src="previewMedia" class="max-w-full rounded-lg" />
+          <video 
+            v-if="previewType === 'video'" 
+            :src="previewMedia" 
+            class="max-w-full rounded-lg" 
+            controls 
+            autoplay
+            controlsList="nodownload"
+            @play="handleVideoPlay(previewMessageId, previewSelfDestruct, previewCountdown)"
+          ></video>
+        </div>
+        <div class="media-lightbox-close" @click="closeMediaPreview">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </div>
+        <div v-if="previewSelfDestruct && previewCountdown > 0" class="media-lightbox-countdown media-countdown-pulse">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>Tự hủy sau {{ previewCountdown }} giây</span>
+        </div>
+      </div>
+    </transition>
+    
+    <!-- Image/Video Lightbox - temporarily hidden -->
+    <transition name="fade">
+      <div v-if="false && showMediaPreview" class="media-lightbox" @click.self="closeMediaPreview">
         <div class="media-lightbox-content" :class="{'active': showMediaPreview}">
           <img v-if="previewType === 'image'" :src="previewMedia" class="max-w-full rounded-lg" />
           <video 
