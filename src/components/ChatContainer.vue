@@ -686,6 +686,9 @@
 </template>
 
 <script>
+// At the top of the file, add this import
+import { BACKEND_URL, WS_URL, API_ENDPOINTS } from '@/utils/config';
+
 export default {
   name: 'ChatContainer',
   data() {
@@ -843,9 +846,7 @@ export default {
     
     fetchStats() {
       // Lấy dữ liệu thống kê từ API backend
-      const statsUrl = process.env.NODE_ENV === 'development' 
-        ? 'http://localhost:8080/api/stats' 
-        : '/api/stats';
+      const statsUrl = API_ENDPOINTS.STATS;
       
       fetch(statsUrl, {
         method: 'GET',
@@ -922,18 +923,8 @@ export default {
       }
       
       try {
-        // Create new WebSocket connection
-        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        // Xây dựng URL dựa trên host hiện tại hoặc kết nối trực tiếp với backend
-        let wsUrl;
-        
-        // Trong môi trường development, kết nối trực tiếp với backend
-        if (process.env.NODE_ENV === 'development') {
-          wsUrl = 'ws://localhost:8080/chat';
-        } else {
-          // Trong môi trường production, sử dụng URL tương đối
-          wsUrl = `${protocol}//${window.location.host}/ws/chat`;
-        }
+        // Use the configured WebSocket URL
+        const wsUrl = API_ENDPOINTS.CHAT;
         
         console.log('Connecting to WebSocket at:', wsUrl);
         this.socket = new WebSocket(wsUrl);
